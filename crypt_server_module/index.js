@@ -647,6 +647,125 @@ var cryptServer = (function(){
             }catch(err){
                 res.send(err);
             }
+        },
+        translateMinerSummary:function(summary){
+            return {
+                status:summary.STATUS[0].STATUS,
+                when:summary.STATUS[0].When,
+                code:summary.STATUS[0].Code,
+                msg:summary.STATUS[0].Msg,
+                description:summary.STATUS[0].Description,
+                elapsed:summary.SUMMARY[0].Elapsed,
+                mhs_av:summary.SUMMARY[0]['MHS av'],
+                mhs_20s:summary.SUMMARY[0]['MHS 20s'],
+                found_blocks:summary.SUMMARY[0]['Found Blocks'],
+                getworks:summary.SUMMARY[0].Getworks,
+                accepted:summary.SUMMARY[0].Accepted,
+                rejected:summary.SUMMARY[0].Rejected,
+                hardware_errors:summary.SUMMARY[0]['Hardware Errors'],
+                utility:summary.SUMMARY[0].Utility,
+                discarded:summary.SUMMARY[0].Discarded,
+                stale:summary.SUMMARY[0].Stale,
+                get_failures:summary.SUMMARY[0]['Get Failures'],
+                local_work:summary.SUMMARY[0]['Local Work'],
+                remote_failures:summary.SUMMARY[0]['Remote Failures'],
+                network_blocks:summary.SUMMARY[0]['Network Blocks'],
+                total_mh:summary.SUMMARY[0]['Total MH'],
+                diff1_work:summary.SUMMARY[0]['Diff1 Work'],
+                work_utility:summary.SUMMARY[0]['Work Utility']
+            };
+        },
+        translateMinerDevices:function(deviceSummary){
+            var devices = [];
+            deviceSummary.DEVS.forEach((device)=>{
+                var enabled = (device.Enabled === 'Y') ? 1 : 0;
+                devices.push({
+                    when:deviceSummary.STATUS[0].When,
+                    pga:device.PGA,
+                    name:device.Name,
+                    id:device.ID,
+                    enabled:enabled,
+                    status:device.Status,
+                    device_elapsed:device['Device Elapsed'],
+                    mhs_av:device['MHS av'],
+                    mhs_20s:device['MHS 20s'],
+                    mhs_rolling:device['MHS rolling'],
+                    accepted:device.Accepted,
+                    rejected:device.Rejected,
+                    harware_errors:device['Hardware Errors'],
+                    utility:device.Utility,
+                    stale:device.Stale,
+                    last_share_pool:device['Last Share Pool'],
+                    last_share_time:device['Last Share Time'],
+                    total_mh:device['Total MH'],
+                    diff1_work:device['Diff1 Work'],
+                    work_utility:device['Work Utility'],
+                    difficulty_accepted:device['Difficulty Accepted'],
+                    difficulty_rejected:device['Difficulty Rejected'],
+                    difficulty_stale:device['Difficulty Stale'],
+                    last_share_difficulty:device['Last Share Difficulty'],
+                    last_valid_work:device['Last Valid Work'],
+                    device_hardware_percent:device['Device Hardware%'],
+                    device_rejected_percent:device['Device Rejected%']
+                });
+            });
+            return devices;
+        },
+        translateMinerPools:function(poolSummary){
+            var pools = [];
+            poolSummary.POOLS.forEach((pool)=>{
+                pools.push({
+                    when:poolSummary.STATUS[0].When,
+                    pool:pool.POOL,
+                    url:pool.URL,
+                    status:pool.Status,
+                    priority:pool.Priority,
+                    quota:pool.Quota,
+                    mining_goal:pool['Mining Goal'],
+                    long_poll:pool['Long Poll'],
+                    getworks:pool.Getworks,
+                    accepted:pool.Accepted,
+                    rejected:pool.Rejected,
+                    works:pool.Works,
+                    discarded:pool.Discarded,
+                    stale:pool.Stale,
+                    get_failures:pool['Get Failures'],
+                    remote_failures:pool['Remote Failures'],
+                    user:pool.User,
+                    last_share_time:pool['Last Share Time'],
+                    diff1_share:pool['Diff1 Shares'],
+                    proxy:pool.Proxy,
+                    difficulty_accepted:pool['Difficulty Accepted'],
+                    difficulty_rejected:pool['Difficulty Rejected'],
+                    difficulty_stale:pool['Difficulty Stale'],
+                    last_share_difficulty:pool['Last Share Difficulty'],
+                    has_stratum:pool['Has Stratum'],
+                    stratum_active:pool['Stratum Active'],
+                    stratum_url:pool['Stratum URL'],
+                    best_share:pool['Best Share'],
+                    pool_rejected_percent:pool['Pool Rejected%'],
+                    pool_stale_percent:pool['Pool Stale%']
+                });
+            });
+            return pools;
+        },
+        onSummary:function(args){
+            var summary = this.translateMinerSummary(args[0]);
+            var summaryObj = new WorkerStatusSnapShot();
+            summaryObj._setFields(summary);
+            summaryObj._create().then((summaryObj)=>{console.log('Miner Summary Saved.');},console.error);
+        },
+        onDevice:function(args){
+            var summary = this.translateMinerDevices(args[0]);
+            var summaryObj = new WorkerDeviceSnapShot();
+            summaryObj._setFields(summary);
+            summaryObj._create().then((summaryObj)=>{console.log('Device Update Saved.');},console.error);
+        }
+        onPool:function(args){
+            var summary = this.translateMinerPools(args[0]);
+            var summaryObj = new WorkerPoolSnapShot();
+            summaryObj._setFields(summary);
+            summaryObj._create().then(()=>{console.log('Pool Update Saved.');},console.error);
         }
     }
 }());
