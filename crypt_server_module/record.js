@@ -3,7 +3,7 @@
 class Record{
 
     constructor(db,table,primaryKey,id){
-        const database = require('../../db');
+        const database = require('./db');
         this.database = db;
         this.table = table;
         this.primaryKey = primaryKey;
