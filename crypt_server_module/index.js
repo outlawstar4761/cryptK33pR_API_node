@@ -1,6 +1,6 @@
 var cryptServer = (function(){
     const http = require('http');
-    const database = require('../../db');
+    const database = require('./db');
     const QuickLink = require('./quickLink');
     const Coin = require('./coin');
     const Market = require('./market');
