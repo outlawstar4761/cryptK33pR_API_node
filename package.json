@@ -9,7 +9,8 @@
   "dependencies": {
     "express": "",
     "body-parser": "",
-    "http":""
+    "http":"",
+    "autobahn":""
   },
   "author": "",
   "license": "ISC"
