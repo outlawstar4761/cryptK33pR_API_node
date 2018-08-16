@@ -10,7 +10,8 @@
     "express": "",
     "body-parser": "",
     "http":"",
-    "autobahn":""
+    "autobahn":"",
+    "mysql":""
   },
   "author": "",
   "license": "ISC"
