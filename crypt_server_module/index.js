@@ -760,7 +760,7 @@ var cryptServer = (function(){
             var summaryObj = new WorkerDeviceSnapShot();
             summaryObj._setFields(summary);
             summaryObj._create().then((summaryObj)=>{console.log('Device Update Saved.');},console.error);
-        }
+        },
         onPool:function(args){
             var summary = this.translateMinerPools(args[0]);
             var summaryObj = new WorkerPoolSnapShot();
