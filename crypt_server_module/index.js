@@ -75,7 +75,7 @@ var cryptServer = (function(){
         },
         verifyToken:function(req,res,next){
             _verifyToken(req.headers.auth_token).then((data)=>{
-                res.send(req.headers.auth_token);
+                res.send({token:req.headers.auth_token});
             },(err)=>{
                 res.send(err);
             });
