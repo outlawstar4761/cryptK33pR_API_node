@@ -7,15 +7,14 @@ var cryptServer = (function(){
     const Pool = require('./pool');
     const Wallet = require('./wallet');
     const Transaction = require('./transaction');
-    const ACCOUNTS = 'api.outlawdesigns.io';
-    const ACCOUNTPORT = 9661;
+    const Constants = require('./credentials');
     const RESOURC_ERR = 'Trying to access restricted resource';
-    var db = new database('localhost','root','','crypto');
+    var db = new database(Constants.DBHOST,Constants.DBHOST,Constants.DBPASS,'crypto');
     function httpRequest(host,method,endpoint,params){
         return new Promise(function(resolve, reject){
             var options = {
                 hostname:host,
-                port:ACCOUNTPORT,
+                port:Constants.ACCOUNTPORT,
                 path:'/' + endpoint,
                 method:method,
                 headers:{
@@ -65,7 +64,7 @@ var cryptServer = (function(){
                 username:req.headers.request_token,
                 password:req.headers.password
             };
-            httpRequest(ACCOUNTS,'GET','authenticate',params).then((data)=>{
+            httpRequest(Constants.ACCOUNTS,'GET','authenticate',params).then((data)=>{
                 if(data.error){
                     res.send(data.error);
                     return;
