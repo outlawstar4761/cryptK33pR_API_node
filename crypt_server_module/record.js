@@ -9,7 +9,7 @@ class Record{
         this.table = table;
         this.primaryKey = primaryKey;
         this.id = id;
-        this.db = new database(Constants.DBHOST,Constants.DBHOST,Constants.DBPASS,this.database);
+        this.db = new database(Constants.DBHOST,Constants.DBUSER,Constants.DBPASS,this.database);
     }
     _build(){
         return new Promise((resolve,reject)=>{
