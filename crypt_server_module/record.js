@@ -4,11 +4,12 @@ class Record{
 
     constructor(db,table,primaryKey,id){
         const database = require('./db');
+        const Constants = require('./credentials');
         this.database = db;
         this.table = table;
         this.primaryKey = primaryKey;
         this.id = id;
-        this.db = new database('localhost','root','',this.database);
+        this.db = new database(Constants.DBHOST,Constants.DBHOST,Constants.DBPASS,this.database);
     }
     _build(){
         return new Promise((resolve,reject)=>{
